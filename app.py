@@ -24,8 +24,16 @@ class App:
         elif e.type == KEYDOWN:
             if e.key == K_ESCAPE:
                 self.running = False
-            if e.key == K_a:
-                self.objects[0].movement = Player.RUNNING
+            if e.key == K_LEFT:
+                self.objects[0].change_direction(Player.LEFT)
+            if e.key == K_RIGHT:
+                self.objects[0].change_direction(Player.RIGHT)
+            if e.key == K_UP:
+                self.objects[0].change_movement(Player.JUMPING)
+            if e.key == K_z:
+                self.objects[0].change_movement(Player.RUNNING)
+            if e.key == K_d:
+                self.objects[0].change_movement(Player.DEAD)
 
 
     def on_render(self):
