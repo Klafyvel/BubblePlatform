@@ -26,4 +26,4 @@ class Block(pygame.sprite.Sprite):
     def on_update(self):
         pass
     def as_dict(self):
-        return {"x":self.x, "y":self.y, "Type":self.image_name}
+        return {"x":self.rect.x, "y":self.rect.y, "Type":self.image_name}
