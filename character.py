@@ -64,9 +64,9 @@ class Character(pygame.sprite.Sprite):
     RIGHT = 1
 
     X_DISPLACEMENT = 15
-    Y_DISPLACEMENT = 2
+    Y_DISPLACEMENT = 5
 
-    Y_SPEED = -15
+    Y_SPEED = -20
 
     Y_SPEED_MAX = -30
 
@@ -86,9 +86,13 @@ class Character(pygame.sprite.Sprite):
         dst.blit(self.image)
 
     def move_right(self):
+        if self.collide.right:
+            return
         self.rect.x += self.X_DISPLACEMENT
 
     def move_left(self):
+        if self.collide.left:
+            return
         self.rect.x -= self.X_DISPLACEMENT
 
     def jump(self):
@@ -99,7 +103,7 @@ class Character(pygame.sprite.Sprite):
     def gravity(self):
         if not self.collide.bottom:
             self.rect.y += self.v_y
-            self.v_y = max(self.v_y+self.Y_DISPLACEMENT, self.Y_SPEED_MAX)
+            self.v_y = self.v_y+self.Y_DISPLACEMENT
         elif self.collide.bottom[0]:
             self.v_y = 0
             self.rect.y = self.collide.bottom[1].rect.y - self.collide.bottom[0][1] - Block.BLOCK_SIZE

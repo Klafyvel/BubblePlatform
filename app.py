@@ -37,17 +37,19 @@ class App:
 
 
     def on_event(self, e):
+        k = pygame.key.get_pressed()
+        if k[K_LEFT]:
+            self.player.change_direction(Player.LEFT)
+            self.player.change_movement(Player.RUNNING)
+        if k[K_RIGHT]:
+            self.player.change_direction(Player.RIGHT)
+            self.player.change_movement(Player.RUNNING)
+
         if e.type == QUIT:
             self.running = False
         elif e.type == KEYDOWN:
             if e.key == K_ESCAPE:
                 self.running = False
-            if e.key == K_LEFT:
-                self.player.change_direction(Player.LEFT)
-                self.player.change_movement(Player.RUNNING)
-            elif e.key == K_RIGHT:
-                self.player.change_movement(Player.RUNNING)
-                self.player.change_direction(Character.RIGHT)
             elif e.key == K_UP:
                 self.player.jump()
             if e.key == K_d:
