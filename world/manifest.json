@@ -1,0 +1,41 @@
+{
+  "Name" : "Test World",
+  "Author" : "klafyvel",
+  "Blocks" : {
+    "Sprite sheet" : {
+      "Path":"Blocks/sprites.png",
+      "Sprites description": [
+        {"Name":"A", "x":0, "y":0, "width":32, "height":32},
+        {"Name":"B", "x":32, "y":0, "width":32, "height":32},
+        {"Name":"C", "x":64, "y":0, "width":32, "height":32},
+        {"Name":"D", "x":96, "y":0, "width":32, "height":32},
+        {"Name":"E", "x":128, "y":0, "width":32, "height":32},
+        {"Name":"F", "x":160, "y":0, "width":32, "height":32},
+        {"Name":"G", "x":192, "y":0, "width":32, "height":32},
+        {"Name":"H", "x":224, "y":0, "width":32, "height":32}
+      ]
+    },
+    "Foreground blocks" :[
+      {"x" : 0, "y": 0, "Type":"H"},
+
+    ],
+    "Background blocks" :[
+      {"x" : 0, "y": 64, "Type":"A"},
+      {"x" : 32, "y": 32, "Type":"D"},
+      {"x" : 64, "y": 32, "Type":"A"},
+      {"x" : 96, "y": 32, "Type":"C"}
+    ]
+  },
+  "Characters" : {
+    "Characters" : [
+      {"Name" : "Monster_A", "Path" : "Characters/Monster_A/Monster_A.json"},
+      {"Name" : "Monster_B", "Path" : "Characters/Monster_B/Monster_B.json"},
+      {"Name" : "Monster_C", "Path" : "Characters/Monster_C/Monster_C.json"}
+    ],
+    "Places" : [
+      {"x" : 20, "y" : 20, "Name" : "Monster_A", "left_displacement" : 20, "right_displacement" : 20},
+      {"x" : 50, "y" : 20, "Name" : "Monster_B", "left_displacement" : 20, "right_displacement" : 20},
+      {"x" : 80, "y" : 20, "Name" : "Monster_C", "left_displacement" : 20, "right_displacement" : 20}
+    ]
+  }
+}
