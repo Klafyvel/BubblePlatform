@@ -6,10 +6,9 @@ from pygame.locals import *
 
 from app import App, UPDATE_SPRITES_EVENT
 from character import Player
-from block import Block
+from block import Block, get_equivalent_block_pos, test_in_rect
 from bubbleLoader import BubbleLoader
 
-test_in_rect = lambda rect, pos: pos[0] >= rect[0] and pos[0] < (rect[2]+rect[0]) and pos[1] >= rect[1] and pos[1] < (rect[3]+rect[1])
 
 class Editor(App):
     def __init__(self):
@@ -51,7 +50,7 @@ class Editor(App):
         elif e.type == MOUSEBUTTONDOWN:
             if self.menu.test_click(e.pos):
                 return
-            eq = e.pos[0] - (e.pos[0]%Block.BLOCK_SIZE), e.pos[1] - (e.pos[1]%Block.BLOCK_SIZE)
+            eq = get_equivalent_block_pos(e.pos)
             if e.button == 3:
                 if self.current_layer == "Background":
                     self.background.pop(eq, None)

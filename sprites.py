@@ -28,7 +28,7 @@ class Animation:
         self.current = (self.current + 1) % len(self.images)
         return i
 
-    def current(self):
+    def current_image(self):
         return self.images[self.current]
 
     def stop(self):

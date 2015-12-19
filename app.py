@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 from bubbleLoader import BubbleLoader
-from character import Player, Character
+from character import Player, Character, Collider
 
 UPDATE_SPRITES_EVENT = pygame.USEREVENT
 
@@ -15,6 +15,7 @@ class App:
         pygame.font.init()
         #self.window = pygame.display.set_mode((0, 0), FULLSCREEN)
         self.window = pygame.display.set_mode((600,600))
+        pygame.display.set_caption("Bubble Platform !")
         pygame.mouse.set_visible(False)
         pygame.key.set_repeat(5, 5)
 
@@ -27,6 +28,8 @@ class App:
         self.foreground = {}
         self.background = {}
         self.middleground = {}
+
+        self.collider = Collider(self)
 
         pygame.time.set_timer(UPDATE_SPRITES_EVENT, 60)
 
@@ -73,6 +76,7 @@ class App:
             #else:
             #    self.player.change_movement(Player.MOTIONLESS)
             self.window.fill((200,200,200))
+            self.collider.collide()
             if not pygame.event.peek(KEYDOWN):
                 self.player.change_movement(Player.MOTIONLESS)
 
