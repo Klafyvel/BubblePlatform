@@ -13,7 +13,7 @@ class Block:
 
     def __init__(self, pos, image=None):
         self.x, self.y = pos
-        self.image = Block.SPRITES[image]
+        self.image = Block.SPRITES.get(image, None)
         self.image_name = image
 
     def on_render(self, dst):
@@ -21,5 +21,5 @@ class Block:
 
     def on_update(self):
         pass
-    def __dict__(self):
+    def as_dict(self):
         return {"x":self.x, "y":self.y, "Type":self.image_name}

@@ -41,6 +41,8 @@ class Editor(App):
                 self.current_layer = "Middleground"
             elif e.key == K_f:
                 self.current_layer = "Foreground"
+            elif e.key == K_s:
+                self.loader.save()
         elif e.type == UPDATE_SPRITES_EVENT:
             for o in self.objects:
                 o.on_update()
