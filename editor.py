@@ -15,6 +15,8 @@ class Editor(App):
         super().__init__()
         pygame.mouse.set_visible(True)
 
+        self.objects = {}
+
         self.current_layer = "Middleground"
         x,y = self.window.get_width() - Block.BLOCK_SIZE - 20, 0
         w,h = Block.BLOCK_SIZE + 20, self.window.get_height()
