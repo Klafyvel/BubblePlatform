@@ -7,12 +7,11 @@ class SpriteSheet:
     def __init__(self, image_path):
         self.image = pygame.image.load(image_path).convert_alpha()
 
+
     def image_at(self, rect):
-        cut = pygame.Rect(rect)
-        image = pygame.Surface(cut.size).convert()
-        image.blit(self.image, (0, 0), rect)
-        image.convert_alpha()
-        return image
+        image = self.image.subsurface(rect)
+        #image.convert_alpha()
+        return image.copy()
 
     def images_at(self, rect, nb):
         return [self.image_at((i * rect[2], rect[1], rect[2], rect[3])) for i in range(nb)]
@@ -29,6 +28,12 @@ class Animation:
         self.current = (self.current + 1) % len(self.images)
         return i
 
+    def current(self):
+        return self.images[self.current]
+
+    def stop(self):
+        self.current = 0
+
 
 class TimedAnimation(Animation):
 
@@ -43,3 +48,6 @@ class TimedAnimation(Animation):
             return Animation.next(self)
         else:
             return self.images[self.current]
+
+    def stop(self):
+        pass
