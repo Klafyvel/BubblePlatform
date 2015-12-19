@@ -16,7 +16,7 @@ class Editor(App):
         super().__init__()
         pygame.mouse.set_visible(True)
 
-        self.current_layer = "Background"
+        self.current_layer = "Middleground"
         x,y = self.window.get_width() - Block.BLOCK_SIZE - 20, 0
         w,h = Block.BLOCK_SIZE + 20, self.window.get_height()
         self.menu = SideMenu((x,y), (w,h))
