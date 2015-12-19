@@ -56,6 +56,8 @@ class App:
     def on_render(self):
         for o in self.background.values():
             o.on_render(self.window)
+        for o in self.middleground.values():
+            o.on_render(self.window)
         for o in self.objects:
             o.on_render(self.window)
         for o in self.foreground.values():

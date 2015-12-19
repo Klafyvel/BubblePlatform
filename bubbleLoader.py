@@ -60,6 +60,9 @@ class BubbleLoader(dict):
         for b in blocks_info['Foreground blocks']:
             pos = (b['x'], b['y'])
             self.app.foreground[pos] = Block(pos, image=b['Type'])
+        for b in blocks_info['Middleground blocks']:
+            pos = (b['x'], b['y'])
+            self.app.middleground[pos] = Block(pos, image=b['Type'])
 
     def get_blocks_to_save(self):
         d = {"Foreground blocks":[], "Background blocks":[], "Middleground blocks":[]}
@@ -92,10 +95,12 @@ class BubbleLoader(dict):
             manifest_file.write(json.dumps(manifest))
 
         archive = zipfile.ZipFile(self.file, 'w')
+        curdir = os.getcwd()
         os.chdir(self.tmp_dir.name)
         for root, dirs, files in os.walk(os.curdir):
             for f in files:
                 archive.write(os.path.join(root, f))
+        os.chdir(curdir)
         archive.close()
 
         self.tmp_dir.cleanup()
