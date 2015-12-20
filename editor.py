@@ -25,7 +25,17 @@ class Editor(App):
         self.font = pygame.font.Font(None, 32)
 
     def on_render(self):
-        super().on_render()
+        for o in self.background.values():
+            o.on_render(self.window)
+        if self.current_layer in ("Middleground", "Foreground"):
+            for o in self.middleground.values():
+                o.on_render(self.window)
+        for o in self.objects:
+            o.on_render(self.window)
+        if self.current_layer == "Foreground":
+            for o in self.foreground.values():
+                o.on_render(self.window)
+
         self.menu.on_render(self.window)
         txt = self.font.render(self.current_layer, True, (0,0,0))
         self.window.blit(txt, (0,0))
