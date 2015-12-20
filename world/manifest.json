@@ -12,14 +12,15 @@
         {"Name":"E", "x":128, "y":0, "width":32, "height":32},
         {"Name":"F", "x":160, "y":0, "width":32, "height":32},
         {"Name":"G", "x":192, "y":0, "width":32, "height":32},
-        {"Name":"H", "x":224, "y":0, "width":32, "height":32}
+        {"Name":"H", "x":224, "y":0, "width":32, "height":32},
+        {"Name":"I", "x":256, "y":0, "width":32, "height":32}
       ]
     },
     "Foreground blocks" :[
       {"x" : 0, "y": 0, "Type":"H"}
-
     ],
-    "Background blocks" :[
+    "Background blocks" : [],
+    "Middleground blocks" :[
       {"x" : 0, "y": 64, "Type":"A"},
       {"x" : 32, "y": 32, "Type":"D"},
       {"x" : 64, "y": 32, "Type":"A"},
