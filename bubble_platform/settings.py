@@ -13,6 +13,8 @@ APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
 
+RC_DIR = os.path.join(APP_DIR, "rc", "")
+
 if DEBUG:
     DATA_DIR = APP_DIR
 else:

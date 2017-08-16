@@ -33,13 +33,14 @@ class ResourceManager():
         """
         self.rc[rc_name] = pygame.font.Font(font_name, text_size)
 
-    def load_image(self, path):
+    def load_image(self, path, rc_name):
         """
         Loads an image.
 
         :param path: The path of the image.
+        :param rc_name: The name of the resource.
         """
-        pass
+        self.rc[rc_name] = pygame.image.load(os.path.join(settings.RC_DIR), path)
 
     def add_surface(self, s, name):
         """
