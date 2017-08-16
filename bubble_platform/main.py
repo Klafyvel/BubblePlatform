@@ -16,6 +16,7 @@ class App():
 
         self.rc_manager = ResourceManager()
         self.rc_manager.load_image("Blocks.png", "blocks")
+        self.rc_manager.load_font(None, 40, "main_menu")
 
         self.menu = Menu(
             ("Foo", self.on_foo),
@@ -28,8 +29,9 @@ class App():
             border=(255, 255, 255),
             border_width=3,
             image='blocks',
-            min_width=400,
-            min_height=100,
+            min_width=200,
+            min_height=50,
+            font="main_menu",
         )
 
         self.running = True
@@ -43,7 +45,7 @@ class App():
                     self.menu.on_event(e)
             w,h = self.menu.size()
             self.window.fill((0,0,0))
-            self.menu.on_render(self.window, 600-w/2, 600-h/2)
+            self.menu.on_render(self.window, (600-w)/2, (600-h)/2)
 
             pygame.display.flip()
             pygame.time.Clock().tick(20)

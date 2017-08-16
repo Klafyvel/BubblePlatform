@@ -221,7 +221,7 @@ class VLayout():
         """
         w, h = zip(*map(lambda x: x.min_size(), self.widgets))
         n = len(self.widgets)
-        return (max(w) + 2 * WIDGET_MARGIN, max(h) + (n+1) * WIDGET_MARGIN)
+        return (max(w) + 2 * WIDGET_MARGIN, max(h)*n + (n+1) * WIDGET_MARGIN)
 
     def on_render(self, dst, rx, ry):
         """
