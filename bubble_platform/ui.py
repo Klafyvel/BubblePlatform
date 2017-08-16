@@ -35,6 +35,8 @@ class Button():
         :param border_width: width of the border (default = 0)
         :param callback: A function to call when clicked. (default = lambda :
             None)
+        :param min_width: A minimum width for the button. (default = 0)
+        :param min_height:A minimum height for the button. (default = 0)
 
         :type rc_manager: ResourceManager
         :type text: str
@@ -44,6 +46,8 @@ class Button():
         :type border: (int, int, int)
         :type border_width: int
         :type callback: function
+        :type min_width: int
+        :type min_height: int
         """
 
         self.rc_manager = rc_manager
@@ -54,6 +58,8 @@ class Button():
         self.border = kwargs.get("border", None)
         self.border_width = kwargs.get("border_width", 0)
         self.callback = kwargs.get("callback", lambda : None)
+        self.min_width = kwargs.get("min_width", 0)
+        self.min_height = kwargs.get("min_height", 0)
 
         self.rect = (0, 0, 0, 0)
         self.hovered = False
@@ -64,7 +70,7 @@ class Button():
         Returns the minimum size the widget needs to be drawn.
         """
         w, h = self.rc_manager.get(self.font).size(self.text)
-        return (w+2*WIDGET_PADDING, h+2*WIDGET_PADDING)
+        return (max(self.min_width,w+2*WIDGET_PADDING), max(self.min_height,h+2*WIDGET_PADDING))
 
     def render_border(self, dst):
         if self.border and self.border_width > 0:
