@@ -33,9 +33,8 @@ class Button():
         :param background: Background color (default = None)
         :param border: color of the border (default = None)
         :param border_width: width of the border (default = 0)
-        :param corner_image: an image to be put in the corner of the widget
-            (default = None)
-        :param callback: A function to call when clicked. (default = lambda : None)
+        :param callback: A function to call when clicked. (default = lambda :
+            None)
 
         :type rc_manager: ResourceManager
         :type text: str
@@ -44,7 +43,6 @@ class Button():
         :type background: (int, int, int)
         :type border: (int, int, int)
         :type border_width: int
-        :type corner_image: str
         :type callback: function
         """
 
@@ -55,46 +53,11 @@ class Button():
         self.background = kwargs.get("background", None)
         self.border = kwargs.get("border", None)
         self.border_width = kwargs.get("border_width", 0)
-        self.corner_image = kwargs.get("corner_image", None)
         self.callback = kwargs.get("callback", lambda : None)
 
         self.rect = (0, 0, 0, 0)
         self.hovered = False
         self.clicked = False
-
-        if self.corner_image:
-            if not self.rc_manager.exists(self.corner_image + "_lt"):
-                self.rc_manager.add_surface(
-                    self.rc_manager.get(self.corner_image),
-                    self.corner_image + "_lt"
-                )
-            if not self.rc_manager.exists(self.corner_image + "_lb"):
-                self.rc_manager.add_surface(
-                    pygame.transform.flip(
-                        self.rc_manager.get(self.corner_image),
-                        False,
-                        True
-                    ),
-                    self.corner_image + "_lb"
-                )
-            if not self.rc_manager.exists(self.corner_image + "_rb"):
-                self.rc_manager.add_surface(
-                    pygame.transform.flip(
-                        self.rc_manager.get(self.corner_image),
-                        True,
-                        True
-                    ),
-                    self.corner_image + "_rb"
-                )
-            if not self.rc_manager.exists(self.corner_image + "_rt"):
-                self.rc_manager.add_surface(
-                    pygame.transform.flip(
-                        self.rc_manager.get(self.corner_image),
-                        True,
-                        False
-                    ),
-                    self.corner_image + "_rt"
-                )
 
     def min_size(self):
         """
@@ -103,17 +66,12 @@ class Button():
         w, h = self.rc_manager.get(self.font).size(self.text)
         return (w+2*WIDGET_PADDING, h+2*WIDGET_PADDING)
 
-    def on_render(self, dst, rect):
-        """
-        Render the widget on the given destination
-
-        :param dst: The destination.
-        :param rect: (x, y, width, height) of the widget.
-        """
-        x, y, w, h = rect
-        self.rect = rect
+    def render_border(self, dst):
         if self.border and self.border_width > 0:
-            pygame.draw.rect(dst, self.border, rect)
+            pygame.draw.rect(dst, self.border, self.rect)
+
+    def render_background(self, dst):
+        x,y,w,h = self.rect
         if self.background:
             c = self.background
             if self.clicked and self.hovered:
@@ -136,16 +94,8 @@ class Button():
             )
             pygame.draw.rect(dst, c, rect_bg)
 
-        if self.corner_image:
-            lt = self.rc_manager.get(self.corner_image + "_lt")
-            lb = self.rc_manager.get(self.corner_image + "_lb")
-            rb = self.rc_manager.get(self.corner_image + "_rb")
-            rt = self.rc_manager.get(self.corner_image + "_rt")
-            dst.blit(lt, x, y)
-            dst.blit(lb, x, y + h - lb.get_rect()[3])
-            dst.blit(rb, x + w - rb.get_rect()[2], y + h - rb.get_rect()[3])
-            dst.blit(rt, x + w - rb.get_rect()[2], y)
-
+    def render_font(self, dst):
+        x,y,w,h = self.rect
         font = self.rc_manager.get(self.font)
         w_f, h_f = font.size(self.text)
         c = self.color
@@ -163,7 +113,24 @@ class Button():
             )
         )
 
+    def on_render(self, dst, rect):
+        """
+        Render the widget on the given destination
+
+        :param dst: The destination.
+        :param rect: (x, y, width, height) of the widget.
+        """
+        self.rect = rect
+
+        self.render_border(dst)
+        self.render_background(dst)
+        self.render_font(dst)
+
     def on_event(self, e):
+        """
+        Process the event.
+        :param e: The event.
+        """
         if e.type == MOUSEMOTION:
             self.hovered = pos_in_rect(e.pos, self.rect)
         elif e.type == MOUSEBUTTONDOWN:
@@ -173,6 +140,63 @@ class Button():
             if pos_in_rect(e.pos, self.rect):
                 self.callback()
 
+class ImageButton(Button):
+    """
+    Same as Button except that it displays an image at the left of the text.
+    """
+    def __init__(self, *args, **kwargs):
+        """
+        The __init__ method.
+        See the Button __init__ method for most of the arguments.
+
+        :param image: The image which is to be displayed.
+        """ 
+        super(ImageButton, self).__init__(*args, **kwargs)
+        self.image = kwargs['image']
+
+    def min_size(self):
+        w,h = super(ImageButton, self).min_size()
+        w_i, h_i = self.rc_manager.get(self.image).get_size()
+
+        return (w + w_i + WIDGET_PADDING, max(h + 2*WIDGET_PADDING, h_i))
+
+    def render_font(self, dst):
+        x,y,w,h = self.rect
+        font = self.rc_manager.get(self.font)
+        w_f, h_f = font.size(self.text)
+        c = self.color
+        if self.clicked and self.hovered:
+            c = (
+                255 - c[0],
+                255 - c[1],
+                255 - c[2],
+            )
+        dst.blit(
+            font.render(self.text, True, c), 
+            (
+                x + WIDGET_PADDING + self.image_width,
+                y + (h - h_f) / 2
+            )
+        )
+
+    def on_render(self, *args, **kwargs):
+        """
+        Render the widget on the given destination
+
+        See the Button doc.
+        """
+        image = self.rc_manager.get(self.image)
+        self.image_width = image.get_width()
+        super(ImageButton, self).on_render(*args, **kwargs)
+
+        dst.blit(
+            image,
+            (
+                x + WIDGET_PADDING,
+                y + (h - image.get_height())/2
+            )
+        )
+        
 
 class VLayout():
     """
@@ -261,16 +285,18 @@ class Menu(VLayout):
     """
     A simple menu which calls callbacks on click.
     """
-    def __init__(self, *items, **kwargs):
+    def __init__(self, *items, cls=Button, **kwargs):
         """
         The __init__ method.
 
+        :param cls: The button class which is to be used.
         :param elements: the items of the menu in the form of (item_name,
             callback)
         :param kwargs: The parameters for the buttons. See the Button
             documentation
         """
         super(Menu, self).__init__()
+        self.cls = cls
         for n,c in items:
             self.add_item(n, c, **kwargs)
 
@@ -283,4 +309,4 @@ class Menu(VLayout):
         :param kwargs: The parameters for the buttons. See the Button
             documentation
         """
-        self.widgets.append(Button(**kwargs, text=name, callback=callback))
+        self.widgets.append(self.cls(**kwargs, text=name, callback=callback))

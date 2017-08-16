@@ -8,11 +8,14 @@ from app import App, UPDATE_SPRITES_EVENT
 from character import Player
 from block import Block, get_equivalent_block_pos, test_in_rect
 from bubbleLoader import BubbleLoader
+from menu import Menu, MenuItem
 
 
 class Editor(App):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, window):
+        super().__init__(window)
+        pygame.display.set_caption("Bubble Platform ! - Editor")
+
         pygame.mouse.set_visible(True)
 
         self.objects = {}
@@ -92,59 +95,6 @@ class Editor(App):
             pygame.display.flip()
             pygame.time.Clock().tick(20)
 
-    def on_exit(self):
-        pygame.quit()
-
-class MenuItem:
-    def __init__(self, value, image, pos, size, txt=None):
-        self.font = pygame.font.Font(None, 32)
-
-        self.value = value
-        self.image = image.copy()
-        if txt:
-            self.txt = self.font.render(txt, True, (200,200,200))
-            self.image.blit(self.txt, (0,0))
-        self.pos = pos
-        self.size = size
-        self.selected = False
-
-    def on_render(self, dst):
-        dst.blit(self.image, self.pos)
-        if self.selected:
-            x,y = self.pos
-            w,h = self.size
-            pygame.draw.rect(dst, (0,255,0), (x,y,w,h), 2)
-
-class Menu:
-    def __init__(self, pos, size):
-        self.current = 0
-        self.pos = pos
-        self.size = size
-
-        self.items = []
-
-    def on_render(self, dst):
-        x,y = self.pos
-        w,h = self.size
-        pygame.draw.rect(dst, (0,0,0), (x,y,w,h))
-        for b in self.items:
-            b.on_render(dst)
-
-    def test_click(self, pos):
-        click_on_me = test_in_rect((self.pos[0], self.pos[1], self.size[0], self.size[1]), pos)
-        for n,b in enumerate(self.items):
-            x,y = b.pos
-            w,h = b.size
-            if test_in_rect((x,y,w,h), pos):
-                self.items[self.current].selected = False
-                self.current = n
-                self.items[self.current].selected = True
-        return click_on_me
-    def test_key(self, k):
-        return False
-
-    def get_current(self):
-        return self.items[self.current].value
 
 class SideMenu(Menu):
     def __init__(self, pos, size):
@@ -158,6 +108,7 @@ class SideMenu(Menu):
             self.items.append(i)
             y += Block.BLOCK_SIZE + 5
         self.items[0].selected = True
+        self.current = 0
     def test_key(self, k):
         if k==K_UP:
             c = (self.current - 1) % len(self.items)
@@ -169,6 +120,11 @@ class SideMenu(Menu):
         self.current = c
         self.items[self.current].selected = True
         return True
+    def on_render(self, dst):
+        x,y = self.pos
+        w,h = self.size
+        pygame.draw.rect(dst, (0,0,0), (x,y,w,h))
+        super().on_render(dst)
 
 class BottomMenu(Menu):
     def __init__(self, pos, size):

@@ -19,33 +19,39 @@ class CollideDirection:
         self.bottom = kwargs.get("bottom", None)
         self.center = kwargs.get("center", None)
 
+    def __str__(self):
+        return "Collide : left {} \t right {} \t top {} \t bottom {}".format(self.left, self.right, self.top, self.center)
+
 class Collider:
 
     def __init__(self, app):
         self.app = app
 
-    def collide(self):
+    def collides(self):
         for o in self.app.objects:
-            eq = get_equivalent_block_pos((o.rect.x, o.rect.y))
-            to_be_tested = {
-                (eq[0]-Block.BLOCK_SIZE, eq[1]): "left",
-                #(eq[0]-2*Block.BLOCK_SIZE, eq[1]): "left",
-                (eq[0]+Block.BLOCK_SIZE, eq[1]): "right",
-                #(eq[0]+2*Block.BLOCK_SIZE, eq[1]): "right",
-                (eq[0], eq[1]-Block.BLOCK_SIZE): "top",
-                #(eq[0], eq[1]-2*Block.BLOCK_SIZE): "top",
-                (eq[0], eq[1]+Block.BLOCK_SIZE): "bottom",
-                #(eq[0], eq[1]+2*Block.BLOCK_SIZE): "bottom",
-                (eq[0], eq[1]): "center"
-            }
+            self.collide(o)
 
-            c = {"left":None,"right":None,"top":None,"bottom":None, "center":None}
-            for p in to_be_tested:
-                b = self.app.middleground.get(p, None)
-                if not b:
-                    continue
-                c[to_be_tested[p]] = (pygame.sprite.collide_mask(b, o), b)
-            o.collide = CollideDirection(**c)
+    def collide(self, o):
+        x_o,y_o = o.rect.x, o.rect.y
+        w_o, h_o= o.rect.w, o.rect.h
+        pos_to_be_tested = [(x,y) if not test_in_rect((x_o,y_o,w_o,h_o), (x,y)) else None for x in range(x_o - 2, x_o + w_o + 2) for y in range(y_o-2, y_o + h_o + 2)]
+
+        c = {"left":None,"right":None,"top":None,"bottom":None, "center":None}
+        for p in pos_to_be_tested:
+            if not p:
+                continue
+            b = self.app.middleground.get(get_equivalent_block_pos(p), None)
+            if not b:
+                continue
+            k = "left"
+            if p[1] <= y_o:
+                k = "top"
+            elif p[0] > x_o:
+                k = "right"
+            elif p[1] > y_o:
+                k = "bottom"
+            c[k] = (pygame.sprite.collide_mask(b, o), b)
+        o.collide = CollideDirection(**c)
 
 class Character(pygame.sprite.Sprite):
 
@@ -70,7 +76,7 @@ class Character(pygame.sprite.Sprite):
 
     Y_SPEED_MAX = -30
 
-    def __init__(self, pos):
+    def __init__(self, pos, collider):
         self.image = pygame.Surface((0, 0))
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = pos
@@ -80,6 +86,7 @@ class Character(pygame.sprite.Sprite):
         self.direction = self.RIGHT
         self.movement = self.MOTIONLESS
 
+        self.collider = collider
         self.collide = CollideDirection()
 
     def on_render(self, dst):
@@ -104,12 +111,26 @@ class Character(pygame.sprite.Sprite):
         if not self.collide.bottom:
             self.rect.y += self.v_y
             self.v_y = self.v_y+self.Y_DISPLACEMENT
-        elif self.collide.bottom[0]:
+        else:
             self.v_y = 0
-            self.rect.y = self.collide.bottom[1].rect.y - self.collide.bottom[0][1] - Block.BLOCK_SIZE
+    def adjust_pos(self):
+        while True:
+            self.collider.collide(self)
+            if self.collide.bottom and self.collide.bottom[0]:
+                self.rect.y -= 1
+            elif self.collide.top and self.collide.top[0]:
+                self.rect.y += 1
+            elif self.collide.right and self.collide.right[0]:
+                self.rect.x -= 1
+            elif self.collide.left and self.collide.left[0]:
+                self.rect.x += 1
+            else:
+                break
 
     def on_update(self):
         self.gravity()
+        self.adjust_pos()
+        print(self.collide)
 
     def get_mask(self):
         return pygame.mask.from_surface(self.image)
@@ -119,8 +140,8 @@ class Player(Character):
 
     """The main character."""
 
-    def __init__(self, pos):
-        Character.__init__(self, pos)
+    def __init__(self, *args):
+        Character.__init__(self, *args)
         sprite_sheet = SpriteSheet('main_char.png')
 
 

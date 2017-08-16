@@ -11,6 +11,7 @@ import os
 import pygame
 
 from bubble_platform import settings
+from bubble_platform.settings import logger
 
 class ResourceManager():
     """
@@ -31,6 +32,9 @@ class ResourceManager():
         :param text_size: The size of the text (px).
         :param rc_name: The name of the resource.
         """
+        logger.info("Loading font {} with size {} as {}".format(
+            font_name, text_size, rc_name)
+        )
         self.rc[rc_name] = pygame.font.Font(font_name, text_size)
 
     def load_image(self, path, rc_name):
@@ -40,7 +44,9 @@ class ResourceManager():
         :param path: The path of the image.
         :param rc_name: The name of the resource.
         """
-        self.rc[rc_name] = pygame.image.load(os.path.join(settings.RC_DIR), path)
+        full_path = os.path.join(settings.RC_DIR, path)
+        logger.info("Loading image {} as {}".format(path, rc_name))
+        self.rc[rc_name] = pygame.image.load(full_path, rc_name)
 
     def add_surface(self, s, name):
         """
@@ -49,6 +55,7 @@ class ResourceManager():
         :param s: The surface.
         :param name: The name of the resource.
         """
+        logger.info("Registering surface {}".format(name))
         self.rc[name] = s
 
     def exists(self, name):

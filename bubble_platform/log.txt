@@ -1,0 +1,139 @@
+2017-08-16 22:33:16,168 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:33:16,168 :: DEBUG :: Loading image Blocks.png as blocks
+2017-08-16 22:35:12,040 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:35:12,041 :: DEBUG :: Loading image Blocks.png as blocks
+2017-08-16 22:35:48,435 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:35:48,436 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 22:35:54,952 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:35:54,953 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 22:50:24,082 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:50:24,083 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 22:50:24,083 :: INFO :: Loading image corner.png as corner
+2017-08-16 22:50:24,084 :: INFO :: Registering surface corner_lt
+2017-08-16 22:50:24,084 :: INFO :: Registering surface corner_lb
+2017-08-16 22:50:24,084 :: INFO :: Registering surface corner_rb
+2017-08-16 22:50:24,084 :: INFO :: Registering surface corner_rt
+2017-08-16 22:51:08,820 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:51:08,820 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 22:51:08,821 :: INFO :: Loading image corner.png as corner
+2017-08-16 22:51:08,821 :: INFO :: Registering surface corner_lt
+2017-08-16 22:51:08,822 :: INFO :: Registering surface corner_lb
+2017-08-16 22:51:08,822 :: INFO :: Registering surface corner_rb
+2017-08-16 22:51:08,822 :: INFO :: Registering surface corner_rt
+2017-08-16 22:51:19,667 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:51:19,668 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 22:51:19,669 :: INFO :: Loading image corner.png as corner
+2017-08-16 22:51:19,669 :: INFO :: Registering surface corner_lt
+2017-08-16 22:51:19,669 :: INFO :: Registering surface corner_lb
+2017-08-16 22:51:19,670 :: INFO :: Registering surface corner_rb
+2017-08-16 22:51:19,670 :: INFO :: Registering surface corner_rt
+2017-08-16 22:51:47,239 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:51:47,239 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 22:51:47,240 :: INFO :: Loading image corner.png as corner
+2017-08-16 22:51:55,569 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 22:51:55,569 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 22:51:55,570 :: INFO :: Loading image corner.png as corner
+2017-08-16 22:51:55,570 :: INFO :: Registering surface corner_lt
+2017-08-16 22:51:55,570 :: INFO :: Registering surface corner_lb
+2017-08-16 22:51:55,570 :: INFO :: Registering surface corner_rb
+2017-08-16 22:51:55,570 :: INFO :: Registering surface corner_rt
+2017-08-16 23:03:28,437 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:03:28,442 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:03:28,443 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:03:28,443 :: INFO :: Registering surface corner_lt
+2017-08-16 23:03:28,443 :: INFO :: Registering surface corner_lb
+2017-08-16 23:03:28,444 :: INFO :: Registering surface corner_rb
+2017-08-16 23:03:28,444 :: INFO :: Registering surface corner_rt
+2017-08-16 23:03:44,918 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:03:44,919 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:03:44,919 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:03:44,921 :: INFO :: Registering surface corner_lt
+2017-08-16 23:03:44,921 :: INFO :: Registering surface corner_lb
+2017-08-16 23:03:44,922 :: INFO :: Registering surface corner_rb
+2017-08-16 23:03:44,922 :: INFO :: Registering surface corner_rt
+2017-08-16 23:04:17,454 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:04:17,454 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:04:17,455 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:04:17,455 :: INFO :: Registering surface corner_lt
+2017-08-16 23:04:17,455 :: INFO :: Registering surface corner_lb
+2017-08-16 23:04:17,455 :: INFO :: Registering surface corner_rb
+2017-08-16 23:04:17,456 :: INFO :: Registering surface corner_rt
+2017-08-16 23:06:53,589 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:06:53,590 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:06:53,590 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:06:53,590 :: INFO :: Registering surface corner_lt
+2017-08-16 23:06:53,591 :: INFO :: Registering surface corner_lb
+2017-08-16 23:06:53,591 :: INFO :: Registering surface corner_rb
+2017-08-16 23:06:53,591 :: INFO :: Registering surface corner_rt
+2017-08-16 23:07:10,093 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:07:10,093 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:07:10,094 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:07:10,094 :: INFO :: Registering surface corner_lt
+2017-08-16 23:07:10,094 :: INFO :: Registering surface corner_lb
+2017-08-16 23:07:10,094 :: INFO :: Registering surface corner_rb
+2017-08-16 23:07:10,094 :: INFO :: Registering surface corner_rt
+2017-08-16 23:07:20,355 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:07:20,356 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:07:20,356 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:07:20,356 :: INFO :: Registering surface corner_lt
+2017-08-16 23:07:20,357 :: INFO :: Registering surface corner_lb
+2017-08-16 23:07:20,357 :: INFO :: Registering surface corner_rb
+2017-08-16 23:07:20,357 :: INFO :: Registering surface corner_rt
+2017-08-16 23:07:31,112 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:07:31,112 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:07:31,113 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:07:31,114 :: INFO :: Registering surface corner_lt
+2017-08-16 23:07:31,114 :: INFO :: Registering surface corner_lb
+2017-08-16 23:07:31,114 :: INFO :: Registering surface corner_rb
+2017-08-16 23:07:31,115 :: INFO :: Registering surface corner_rt
+2017-08-16 23:09:42,390 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:09:42,391 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:09:42,391 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:09:42,392 :: INFO :: Registering surface corner_lt
+2017-08-16 23:09:42,392 :: INFO :: Registering surface corner_lb
+2017-08-16 23:09:42,392 :: INFO :: Registering surface corner_rb
+2017-08-16 23:09:42,392 :: INFO :: Registering surface corner_rt
+2017-08-16 23:09:56,922 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:09:56,923 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:09:56,923 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:09:56,923 :: INFO :: Registering surface corner_lt
+2017-08-16 23:09:56,923 :: INFO :: Registering surface corner_lb
+2017-08-16 23:09:56,924 :: INFO :: Registering surface corner_rb
+2017-08-16 23:09:56,924 :: INFO :: Registering surface corner_rt
+2017-08-16 23:11:07,756 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:11:07,757 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:11:07,757 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:11:07,758 :: INFO :: Registering surface corner_lt
+2017-08-16 23:11:07,758 :: INFO :: Registering surface corner_lb
+2017-08-16 23:11:07,758 :: INFO :: Registering surface corner_rb
+2017-08-16 23:11:07,758 :: INFO :: Registering surface corner_rt
+2017-08-16 23:17:35,417 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:17:35,417 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:17:35,418 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:17:35,419 :: INFO :: Registering surface corner_lt
+2017-08-16 23:17:35,419 :: INFO :: Registering surface corner_lb
+2017-08-16 23:17:35,419 :: INFO :: Registering surface corner_rb
+2017-08-16 23:17:35,419 :: INFO :: Registering surface corner_rt
+2017-08-16 23:18:35,809 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:18:35,809 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:18:35,810 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:18:35,810 :: INFO :: Registering surface corner_lt
+2017-08-16 23:18:35,810 :: INFO :: Registering surface corner_lb
+2017-08-16 23:18:35,810 :: INFO :: Registering surface corner_rb
+2017-08-16 23:18:35,811 :: INFO :: Registering surface corner_rt
+2017-08-16 23:18:46,288 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:18:46,289 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:18:46,289 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:18:46,290 :: INFO :: Registering surface corner_lt
+2017-08-16 23:18:46,290 :: INFO :: Registering surface corner_lb
+2017-08-16 23:18:46,290 :: INFO :: Registering surface corner_rb
+2017-08-16 23:18:46,290 :: INFO :: Registering surface corner_rt
+2017-08-16 23:19:03,450 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:19:03,451 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:19:03,452 :: INFO :: Loading image corner.png as corner
+2017-08-16 23:20:00,095 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:20:00,095 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:20:30,814 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:20:30,815 :: INFO :: Loading image Blocks.png as blocks
+2017-08-16 23:20:47,554 :: INFO :: Loading font None with size 20 as default_font
+2017-08-16 23:20:47,554 :: INFO :: Loading image Blocks.png as blocks

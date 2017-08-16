@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 
 from bubble_platform.resource_manager import ResourceManager
-from bubble_platform.ui import Menu
+from bubble_platform.ui import Menu, ImageButton, Button
 
 class App():
     """
@@ -15,16 +15,19 @@ class App():
         pygame.display.set_caption("Bubble Platform !")
 
         self.rc_manager = ResourceManager()
+        self.rc_manager.load_image("Blocks.png", "blocks")
 
         self.menu = Menu(
             ("Foo", self.on_foo),
             ("Bar", self.on_bar),
             ("Quit", self.on_quit),
+            cls=Button,
             rc_manager=self.rc_manager,
             color=(0, 0, 0),
             background=(200, 25, 100),
             border=(255, 255, 255),
             border_width=3,
+            image='blocks',
         )
 
         self.running = True

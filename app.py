@@ -10,12 +10,8 @@ class App:
 
     """Handles the application"""
 
-    def __init__(self):
-        pygame.init()
-        pygame.font.init()
-        #self.window = pygame.display.set_mode((0, 0), FULLSCREEN)
-        self.window = pygame.display.set_mode((600,600))
-        pygame.display.set_caption("Bubble Platform !")
+    def __init__(self, window):
+        self.window = window
         pygame.mouse.set_visible(False)
         pygame.key.set_repeat(5, 5)
 
@@ -23,13 +19,14 @@ class App:
 
         self.running = False
 
-        self.player = Player((0,60))
+        self.collider = Collider(self)
+
+        self.player = Player((0,60), self.collider)
         self.objects = {self.player}
         self.foreground = {}
         self.background = {}
         self.middleground = {}
 
-        self.collider = Collider(self)
 
         pygame.time.set_timer(UPDATE_SPRITES_EVENT, 60)
 
@@ -78,7 +75,7 @@ class App:
             #else:
             #    self.player.change_movement(Player.MOTIONLESS)
             self.window.fill((200,200,200))
-            self.collider.collide()
+            self.collider.collides()
             if not pygame.event.peek(KEYDOWN):
                 self.player.change_movement(Player.MOTIONLESS)
 
@@ -88,5 +85,3 @@ class App:
             pygame.display.flip()
             pygame.time.Clock().tick(20)
 
-    def on_exit(self):
-        pygame.quit()
