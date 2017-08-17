@@ -38,18 +38,22 @@ class ResourceManager():
         )
         self.rc[rc_name] = pygame.font.Font(font_name, text_size)
 
-    def load_image(self, path, rc_name):
+    def load_image(self, path, rc_name, rel=True):
         """
         Loads an image.
 
         :param path: The path of the image.
         :param rc_name: The name of the resource.
+        :param rel: This is a relative path to the RC_DIR directory.
         """
-        full_path = os.path.join(settings.RC_DIR, path)
+        if rel:
+            full_path = os.path.join(settings.RC_DIR, path)
+        else:
+            full_path = path
         logger.info("Loading image {} as {}".format(path, rc_name))
         self.rc[rc_name] = pygame.image.load(full_path, rc_name)
 
-    def load_sprite_sheet(self, path, rect, n, prefix):
+    def load_sprite_sheet(self, path, rect, n, prefix, names=[]):
         """
         Loads a sprite sheet.
 
@@ -57,10 +61,15 @@ class ResourceManager():
         :param rect: The rect for the clipping.
         :param n: The number of sprites.
         :param prefix: The prefix for the resource name.
+        :param names: a list of names
         """
         sp = SpriteSheet(path, rect)
         for i,s in enumerate(sp.images_at(n)):
-            self.add_surface(s, '_'.join([prefix, str(i)]))
+            if len(names) <= 0:
+                self.add_surface(s, '_'.join([prefix, str(i)]))
+            else:
+                self.add_surface(s, '_'.join([prefix, names[i]]))
+
 
 
     def add_surface(self, s, name):
