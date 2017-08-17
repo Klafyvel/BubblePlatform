@@ -12,6 +12,7 @@ import pygame
 
 from bubble_platform import settings
 from bubble_platform.settings import logger
+from bubble_platform.sprites import SpriteSheet
 
 class ResourceManager():
     """
@@ -47,6 +48,20 @@ class ResourceManager():
         full_path = os.path.join(settings.RC_DIR, path)
         logger.info("Loading image {} as {}".format(path, rc_name))
         self.rc[rc_name] = pygame.image.load(full_path, rc_name)
+
+    def load_sprite_sheet(self, path, rect, n, prefix):
+        """
+        Loads a sprite sheet.
+
+        :param path: The path of the image.
+        :param rect: The rect for the clipping.
+        :param n: The number of sprites.
+        :param prefix: The prefix for the resource name.
+        """
+        sp = SpriteSheet(path, rect)
+        for i,s in enumerate(sp.images_at(n)):
+            self.add_surface(s, '_'.join([prefix, str(i)]))
+
 
     def add_surface(self, s, name):
         """
