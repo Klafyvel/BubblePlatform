@@ -1,19 +1,47 @@
+"""
+The sprite module allows to deal with sprites.
+"""
+
 import pygame
 from pygame.locals import *
 
 
 class SpriteSheet:
+    """
+    A simple sprite sheet.
+    """
 
-    def __init__(self, image_path):
+    def __init__(self, image_path, default_rect=None):
+        """
+        The __init__ method.
+
+        :param image_path: The path to the image.
+        :param default_rect: The default rect to be used if no one is provided.
+        """
         self.image = pygame.image.load(image_path).convert_alpha()
-
+        self.default_rect = default_rect
 
     def image_at(self, rect):
-        image = self.image.subsurface(rect)
-        #image.convert_alpha()
+        """
+        Return the image at the asked rect.
+
+        :param rect: The rect.
+        """
+        if rect:
+            image = self.image.subsurface(rect)
+        else:
+            image = self.image.subsurface(self.default_rect)
         return image.copy()
 
-    def images_at(self, rect, nb):
+    def images_at(self, nb, rect=None):
+        """
+        Same as image_at, but with several images.
+
+        :param rect: The rect.
+        :param nb: The number of images.
+        """
+        if not rect:
+            rect = self.default_rect
         return [self.image_at((i * rect[2], rect[1], rect[2], rect[3])) for i in range(nb)]
 
 
