@@ -27,6 +27,7 @@ class Level:
         self.filename = filename
 
         self.map  = []
+        self.drawn_rect = None
 
     def load_map(self):
         """
@@ -55,6 +56,7 @@ class Level:
         Render the map on the given destination. Will only render blocks that
         are in the given rect.
         """
+        self.drawn_rect = rect
         size_x = len(self.map)
         size_y = len(self.map[0])
 
@@ -68,4 +70,15 @@ class Level:
                 img = self.get_image(self.map[i][j])
                 if img:
                     dst.blit(img, (x*BLOCK_SIZE, y*BLOCK_SIZE))
+
+    def coordinate_to_map(self, coord):
+        """
+        Maps drawing coordinates to Map coordinate.
+
+        :param coord: The drawing coordinates.
+        """
+        x,y = coord
+        x -= self.drawn_rect[0]
+        y -= self.drawn_rect[1]
+        return (x//BLOCK_SIZE, y//BLOCK_SIZE)
 
