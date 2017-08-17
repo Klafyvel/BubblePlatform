@@ -133,8 +133,9 @@ class Widget():
         elif e.type == MOUSEBUTTONDOWN:
             self.focus = pos_in_rect(e.pos, self.rect)
         elif e.type == MOUSEBUTTONUP:
-            self.clicked = pos_in_rect(e.pos, self.rect)
-            self.focus = self.clicked
+            if self.focus:
+                self.clicked = pos_in_rect(e.pos, self.rect)
+                self.focus = self.clicked
         elif e.type == KEYDOWN:
             if self.focus:
                 if e.key == K_RETURN:
@@ -210,9 +211,13 @@ class Button(Widget):
         """
         super(Button, self).on_event(e)
 
-        if self.clicked:
-            self.callback()
+        if e.type == MOUSEBUTTONDOWN:
+            self.clicked = pos_in_rect(e.pos, self.rect)
+        elif e.type == MOUSEBUTTONUP:
+            if self.clicked:
+                self.callback()
             self.clicked = False
+
 
 
 class ImageButton(Button):
@@ -299,8 +304,10 @@ class Input(Widget):
         super(Input, self).__init__(*args, **kwargs)
 
         self.max_length = kwargs.get("max_length", None)
-
+        
         self.input = ""
+        self.timer = 0
+
 
     def min_size(self):
         w_label, h_label = self.rc_manager.get(self.font).size(self.text)
@@ -319,12 +326,6 @@ class Input(Widget):
         font = self.rc_manager.get(self.font)
         w_label, h_label = font.size(self.text)
         c = self.color
-        if self.clicked and self.hovered:
-            c = (
-                255 - c[0],
-                255 - c[1],
-                255 - c[2],
-            )
         dst.blit(
             font.render(self.text, True, c),
             (
@@ -333,8 +334,20 @@ class Input(Widget):
             )
         )
         w_input, h_input = font.size(self.input)
+        txt = self.input
+
+        t = pygame.time.get_ticks()
+        if (500 < t - self.timer <= 1000) and self.focus:
+            if self.max_length:
+                if len(self.input) < self.max_length:
+                    txt += '_'
+            else:
+                txt += '_'
+        elif t - self.timer > 1000:
+            self.timer = t
+
         dst.blit(
-            font.render(self.input, True, c),
+            font.render(txt, True, c),
             (
                 x + 2*WIDGET_PADDING + w_label +
                 (w - 2*WIDGET_PADDING - w_label - w_input)/2,
@@ -359,23 +372,31 @@ class Input(Widget):
                 elif e.unicode.isalnum():
                     self.input += e.unicode
 
-class Layout():
+class Layout(Widget):
     """
     The base class for layouts.
     """
-    def __init__(self, *widgets):
+    def __init__(self, *widgets, **kwargs):
         """
         The __init__ method.
 
+        See the Widget documentation for kwargs.
+
         :param widgets: the widgets to be added.
         """
+        super(Layout, self).__init__(**kwargs)
         self.widgets = list(widgets)
+
+    def min_size(self):
+        return self.size()
 
     def size(self):
         """
         Returns the size of the layout.
         """
-        return (0,0)
+        font = self.rc_manager.get(self.font)
+        w,h = font.size(self.text)
+        return (w + 2*WIDGET_PADDING, h + 2*WIDGET_PADDING)
 
     def on_render(self, dst, rx, ry):
         """
@@ -385,7 +406,8 @@ class Layout():
         :param rx: The x position.
         :param ry: The y position.
         """
-        pass
+        w,h = self.size()
+        super(Layout, self).on_render(dst, (rx, ry, w, h))
 
     def on_event(self, e):
         """
@@ -449,9 +471,23 @@ class VLayout(Layout):
         """
         Returns the size of the layout.
         """
+        w_label, h_label = super(VLayout, self).size()
         w, h = zip(*map(lambda x: x.min_size(), self.widgets))
         n = len(self.widgets)
-        return (max(w) + 2 * WIDGET_MARGIN, max(h)*n + (n+1) * WIDGET_MARGIN)
+        return (max(*w, w_label) + 2 * WIDGET_MARGIN, max(h)*n + (n+1) * WIDGET_MARGIN + h_label)
+
+    def render_font(self, dst):
+        x, y, w, h = self.rect
+        font = self.rc_manager.get(self.font)
+        w_f, h_f = font.size(self.text)
+        c = self.color
+        dst.blit(
+            font.render(self.text, True, c),
+            (
+                x + (w - w_f) / 2,
+                y + WIDGET_PADDING
+            )
+        )
 
     def on_render(self, dst, rx, ry):
         """
@@ -461,8 +497,14 @@ class VLayout(Layout):
         :param rx: The x position.
         :param ry: The y position.
         """
-        x, y = rx + WIDGET_MARGIN, ry + WIDGET_MARGIN
+        super(VLayout, self).on_render(dst, rx, ry)
+        font = self.rc_manager.get(self.font)
+        w_label, h_label = font.size(self.text)
+        x, y = rx + WIDGET_PADDING, ry + 2*WIDGET_PADDING + h_label
         w, h = zip(*map(lambda x: x.min_size(), self.widgets))
+        w,h = list(w), list(h)
+        w.append(w_label + 2*WIDGET_PADDING)
+        h.append(h_label + 2*WIDGET_PADDING)
         w, h = max(w), max(h)
         for widget in self.widgets:
             widget.on_render(dst, (x, y, w, h))
@@ -488,9 +530,10 @@ class HLayout(Layout):
         """
         Returns the size of the layout.
         """
+        w_label, h_label = super(HLayout, self).size()
         w, h = zip(*map(lambda x: x.min_size(), self.widgets))
         n = len(self.widgets)
-        return (max(w) + 2 * WIDGET_MARGIN, max(h) + (n+1) * WIDGET_MARGIN)
+        return (max(*w, w_label) + 2 * WIDGET_MARGIN, max(*h, h_label) + (n+1) * WIDGET_MARGIN + h_label)
 
     def on_render(self, dst, rx, ry):
         """
@@ -500,8 +543,13 @@ class HLayout(Layout):
         :param rx: The x position.
         :param ry: The y position.
         """
-        x, y = rx + WIDGET_MARGIN, ry + WIDGET_MARGIN
+        super(HLayout, self).on_render(dst, rx, ry)
+        font = self.rc_manager.get(self.font)
+        w_label, h_label = font.size(self.text)
+        x, y = rx + 2*WIDGET_PADDING + w_label, ry + WIDGET_PADDING
         w, h = zip(*map(lambda x: x.min_size(), self.widgets))
+        w.append(w_label + 2*WIDGET_PADDING)
+        h.append(h_label + 2*WIDGET_PADDING)
         w, h = max(w), max(h)
         for widget in self.widgets:
             widget.on_render(dst, (x, y, w, h))

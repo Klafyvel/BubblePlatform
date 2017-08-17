@@ -22,15 +22,20 @@ class App():
             'rc_manager' : self.rc_manager,
             'color' : (0, 0, 0),
             'background' : (200, 25, 100),
-            'border' : (255, 255, 255),
-            'border_width' : 3,
+            'border' : (0, 255, 0),
+            'border_width' : 5,
             'image' : 'blocks',
             'min_width' : 200,
             'min_height' : 50,
             'font' : "main_menu",        
         }
 
-        self.menu = VLayout()
+        self.menu = VLayout(
+            rc_manager=self.rc_manager,
+            background=(255,255,255),
+            text="The fucking title.",
+            font="main_menu"
+        )
 
         self.menu.add_widget(Button(
             **kwargs,
@@ -46,15 +51,7 @@ class App():
 
         self.menu.add_widget(Input(
             text="Input widget :",
-            rc_manager=self.rc_manager,
-            color=(0, 0, 0),
-            background=(200, 25, 100),
-            border=(255, 255, 255),
-            border_width=3,
-            image='blocks',
-            min_width=200,
-            min_height=50,
-            font="main_menu",
+            **kwargs,
             max_length=20,
         ))
 
