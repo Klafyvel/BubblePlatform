@@ -16,15 +16,17 @@ class Level:
     """
     The base class for every level.
     """
-    def __init__(self, rc_manager, filename):
+    def __init__(self, rc_manager, filename, name):
         """
         The __init__ method.
 
         :param rc_manager: The resource manager.
         :param filename: The file name for the tilemap.
+        :param name: The full name of the level.
         """
 
         self.filename = filename
+        self.name = name
 
         self.map  = []
         self.drawn_rect = None
