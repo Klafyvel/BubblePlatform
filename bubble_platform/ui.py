@@ -301,12 +301,16 @@ class Input(Widget):
 
         See the Widget documentation.
 
-        :param max_length: The maximum length of the input string. (default=None)
+        :param max_length: The maximum length of the input string.
+            (default=None)
+        :param callback: A callback to which the input is sent when return is
+            pressed. (default=lambda x:None)
 
         """
         super(Input, self).__init__(*args, **kwargs)
 
         self.max_length = kwargs.get("max_length", None)
+        self.callback = kwargs.get("callback", lambda x:None)
         
         self.input = ""
         self.timer = 0
@@ -372,8 +376,11 @@ class Input(Widget):
                 elif self.max_length and (e.unicode.isalnum() or (e.unicode in ' _.')):
                     if len(self.input) < self.max_length:
                         self.input += e.unicode
-                elif e.unicode.isalnum():
+                elif e.unicode.isalnum() or (e.unicode in ' _.'):
                     self.input += e.unicode
+                elif e.key == K_RETURN:
+                    self.callback(self.input)
+
 
 class Layout(Widget):
     """

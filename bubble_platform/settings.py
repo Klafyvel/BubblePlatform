@@ -15,6 +15,8 @@ DEBUG = True
 
 RC_DIR = os.path.join(APP_DIR, "rc", "")
 
+CAMPAIGNS_DIR = os.path.join(APP_DIR, "campaigns", "")
+
 if DEBUG:
     DATA_DIR = APP_DIR
 else:
