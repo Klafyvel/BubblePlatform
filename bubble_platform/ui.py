@@ -23,7 +23,7 @@ class Widget():
     A base class for widgets.
     """
 
-    def __init__(self, rc_manager, **kwargs):
+    def __init__(self, **kwargs):
         """
         The __init__ method.
 
@@ -49,7 +49,7 @@ class Widget():
         :type min_height: int
         """
 
-        self.rc_manager = rc_manager
+        self.rc_manager = kwargs["rc_manager"]
         self.text = kwargs.get("text", " ")
         self.font = kwargs.get("font", "default_font")
         self.color = kwargs.get("color", (0, 0, 0))
@@ -69,11 +69,14 @@ class Widget():
         """
         Returns the minimum size the widget needs to be drawn.
         """
-        w, h = self.rc_manager.get(self.font).size(self.text)
-        return (
-            max(self.min_width, w+2*WIDGET_PADDING),
-            max(self.min_height, h+2*WIDGET_PADDING)
-        )
+        if self.text:
+            w, h = self.rc_manager.get(self.font).size(self.text)
+            return (
+                max(self.min_width, w+2*WIDGET_PADDING),
+                max(self.min_height, h+2*WIDGET_PADDING)
+            )
+        else:
+            return (self.min_width, self.min_height)
 
     def render_border(self, dst):
         if self.border and self.border_width > 0:
@@ -376,16 +379,14 @@ class Layout(Widget):
     """
     The base class for layouts.
     """
-    def __init__(self, *widgets, **kwargs):
+    def __init__(self, *args, **kwargs):
         """
         The __init__ method.
 
-        See the Widget documentation for kwargs.
-
-        :param widgets: the widgets to be added.
+        See the Widget documentation.
         """
-        super(Layout, self).__init__(**kwargs)
-        self.widgets = list(widgets)
+        super(Layout, self).__init__(*args, **kwargs)
+        self.widgets = []
 
     def min_size(self):
         return self.size()
@@ -394,11 +395,19 @@ class Layout(Widget):
         """
         Returns the size of the layout.
         """
-        font = self.rc_manager.get(self.font)
-        w,h = font.size(self.text)
-        return (w + 2*WIDGET_PADDING, h + 2*WIDGET_PADDING)
+        if self.text:
+            font = self.rc_manager.get(self.font)
+            w,h = font.size(self.text)
+            return (w + 2*WIDGET_PADDING, h + 2*WIDGET_PADDING)
+        return (0,0)
 
-    def on_render(self, dst, rx, ry):
+    def on_render(self, dst, rect):
+        """            
+        See the Widget documentation.
+        """
+        super(Layout, self).on_render(dst, rect)
+
+    def on_render_as_layout(self, dst, rx, ry):
         """
         Render the layout on the given destination at the given position.
 
@@ -467,14 +476,19 @@ class VLayout(Layout):
         """
         super(VLayout, self).__init__(*args, **kwargs)
 
+    def min_size(self):
+        return self.size()
+
     def size(self):
         """
         Returns the size of the layout.
         """
         w_label, h_label = super(VLayout, self).size()
-        w, h = zip(*map(lambda x: x.min_size(), self.widgets))
-        n = len(self.widgets)
-        return (max(*w, w_label) + 2 * WIDGET_MARGIN, max(h)*n + (n+1) * WIDGET_MARGIN + h_label)
+        if self.widgets:
+            w, h = zip(*map(lambda x: x.min_size(), self.widgets))
+            n = len(self.widgets)
+            return (max(*w, w_label) + 2 * WIDGET_MARGIN, max(h)*n + (n+1) * WIDGET_MARGIN + h_label)
+        return (w_label, h_label)
 
     def render_font(self, dst):
         x, y, w, h = self.rect
@@ -489,7 +503,7 @@ class VLayout(Layout):
             )
         )
 
-    def on_render(self, dst, rx, ry):
+    def on_render_as_layout(self, dst, rx, ry):
         """
         Render the layout on the given destination at the given position.
 
@@ -497,19 +511,51 @@ class VLayout(Layout):
         :param rx: The x position.
         :param ry: The y position.
         """
-        super(VLayout, self).on_render(dst, rx, ry)
+        super(VLayout, self).on_render_as_layout(dst, rx, ry)
+
         font = self.rc_manager.get(self.font)
         w_label, h_label = font.size(self.text)
-        x, y = rx + WIDGET_PADDING, ry + 2*WIDGET_PADDING + h_label
+
+        if self.text:
+            w_label, h_label = font.size(self.text)
+        else:
+            w_label, h_label = (0,0)
+        x, y = rx + WIDGET_PADDING, ry + WIDGET_PADDING
         w, h = zip(*map(lambda x: x.min_size(), self.widgets))
         w,h = list(w), list(h)
-        w.append(w_label + 2*WIDGET_PADDING)
-        h.append(h_label + 2*WIDGET_PADDING)
+        if self.text:
+            y += WIDGET_PADDING + h_label
+            w.append(w_label + 2*WIDGET_PADDING)
+            h.append(h_label + 2*WIDGET_PADDING)
         w, h = max(w), max(h)
         for widget in self.widgets:
             widget.on_render(dst, (x, y, w, h))
             y += h + WIDGET_MARGIN
 
+    def on_render(self, dst, rect):
+        super(VLayout, self).on_render(dst, rect)
+
+        x,y,w,h = rect
+
+        font = self.rc_manager.get(self.font)
+        w_label, h_label = font.size(self.text)
+
+        if self.text:
+            w_label, h_label = font.size(self.text)
+        else:
+            w_label, h_label = (0,0)
+        h = list(map(lambda x: x.min_size()[1], self.widgets))
+        w -= 2*WIDGET_PADDING
+        x +=  WIDGET_PADDING
+        y += WIDGET_PADDING
+        if self.text:
+            y += WIDGET_PADDING + h_label
+            h.append(h_label + 2*WIDGET_PADDING)
+
+        h = max(h)
+        for widget in self.widgets:
+            widget.on_render(dst, (x, y, w, h))
+            y += h + WIDGET_MARGIN
 
 
 class HLayout(Layout):
@@ -525,17 +571,21 @@ class HLayout(Layout):
         """
         super(HLayout, self).__init__(*args, **kwargs)
 
+    def min_size(self):
+        return self.size()
 
     def size(self):
         """
         Returns the size of the layout.
         """
         w_label, h_label = super(HLayout, self).size()
-        w, h = zip(*map(lambda x: x.min_size(), self.widgets))
-        n = len(self.widgets)
-        return (max(*w, w_label) + 2 * WIDGET_MARGIN, max(*h, h_label) + (n+1) * WIDGET_MARGIN + h_label)
+        if self.widgets:
+            w, h = zip(*map(lambda x: x.min_size(), self.widgets))
+            n = len(self.widgets)
+            return (max(w)*n + w_label + (n+1) * WIDGET_MARGIN , max(*h, h_label) + 3*WIDGET_MARGIN)
+        return (w_label, h_label)
 
-    def on_render(self, dst, rx, ry):
+    def on_render_as_layout(self, dst, rx, ry):
         """
         Render the layout on the given destination at the given position.
 
@@ -543,14 +593,43 @@ class HLayout(Layout):
         :param rx: The x position.
         :param ry: The y position.
         """
-        super(HLayout, self).on_render(dst, rx, ry)
+        super(HLayout, self).on_render_as_layout(dst, rx, ry)
         font = self.rc_manager.get(self.font)
-        w_label, h_label = font.size(self.text)
-        x, y = rx + 2*WIDGET_PADDING + w_label, ry + WIDGET_PADDING
+        if self.text:
+            w_label, h_label = font.size(self.text)
+        else:
+            w_label, h_label = (0,0)
+        x, y = rx + WIDGET_PADDING, ry + WIDGET_PADDING
         w, h = zip(*map(lambda x: x.min_size(), self.widgets))
-        w.append(w_label + 2*WIDGET_PADDING)
-        h.append(h_label + 2*WIDGET_PADDING)
+        w, h = list(w), list(h)
+        if self.text:
+            w += WIDGET_PADDING + w_label
+            w.append(w_label + 2*WIDGET_PADDING)
+            h.append(h_label + 2*WIDGET_PADDING)
         w, h = max(w), max(h)
+        for widget in self.widgets:
+            widget.on_render(dst, (x, y, w, h))
+            x += w + WIDGET_MARGIN
+
+    def on_render(self, dst, rect):
+        super(HLayout, self).on_render(dst, rect)
+
+        x,y,w,h = rect
+
+        font = self.rc_manager.get(self.font)
+        if self.text:
+            w_label, h_label = font.size(self.text)
+        else:
+            w_label, h_label = (0,0)
+        w = list(map(lambda x: x.min_size()[0], self.widgets))
+        h = h - 2*WIDGET_PADDING
+        x += WIDGET_PADDING
+        y += WIDGET_PADDING
+        if self.text:
+            x += WIDGET_PADDING + w_label
+            w.append(w_label + 2*WIDGET_PADDING)
+
+        w = max(w)
         for widget in self.widgets:
             widget.on_render(dst, (x, y, w, h))
             x += w + WIDGET_MARGIN
